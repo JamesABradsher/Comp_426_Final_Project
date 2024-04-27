@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Tasker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container" id="background">
+        <div id="forecast-container">
+            <h2>Weather Forecast for the Next 7 Days</h2>
+            <div id="forecast"></div>
+        </div>
+        <div id="todo-list">
+            <h1>Tasks</h1>
+            <input type="text" id="todo-input" placeholder="Add a new to-do...">
+            <input type="date" id="due-date">
+            <button type="button" id="add-btn">Add</button>
+            <ul id="todos"></ul>
+        </div>
+        <div id="completed-todos-container">
+            <h2>Completed</h2>
+            <ul id="completed-todos"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
