@@ -154,13 +154,13 @@ export class User {
     }
 
     promoteTask(id) {
-        if (this.#getTaskIndex(id) > 0 && this.#getTaskIndex(id) <= this.#task_list.length) {
+        if (this.#getTaskIndex(id) > 0 && this.#getTaskIndex(id) <= this.#task_list.length - 1) {
             this.#swapTasks(id, id--);
         }
     }
 
     demoteTask(id) {
-        if (this.#getTaskIndex(id) >= 0 && this.#getTaskIndex(id) < this.#task_list.length) {
+        if (this.#getTaskIndex(id) >= 0 && this.#getTaskIndex(id) < this.#task_list.length - 1) {
             this.#swapTasks(id, id++);
         }
     }
