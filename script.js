@@ -54,7 +54,7 @@ function loginUser(username = "admin", password = "admin") {
   
 
   function createNewUser(username, password) {
-  fetch('/users', {
+  fetch('/newacct', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
