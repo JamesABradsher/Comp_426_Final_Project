@@ -10,11 +10,11 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(cookieParser())
 
-app.put('/login', (req, res) => {
-    let id = req.query.id;
-    let pas = req.query.password; // get id and password from request
+app.post('/login', (req, res) => {
+    let id = req.body.username;
+    let pas = req.body.password; // get id and password from request
     try{
-        let foundUser = User.getUserList().find((user) => user.getId()==id&&user.getPassword()==pas);
+        let foundUser = User.getUserList().find((user) => user.getUsername()==id&&user.matchPassword(pas));
     }catch(error){
         let foundUser = undefined;
     }
@@ -38,13 +38,13 @@ app.put('/login', (req, res) => {
     
     
 });
-app.put('/logout',(req,res) =>{
-    let id = req.query.id;
-    let pas = req.query.password; // get id and password from request
+app.post('/logout',(req,res) =>{
+    let id = req.body.username;
+    let pas = req.body.password; // get id and password from request
     const cookies = req.cookies; // gets the cookies held by the client
     let val = cookies[id];
     try{
-        let foundUser = User.getUserList().find((user) => user.getId()==id&&user.getPassword()==pas);
+        let foundUser = User.getUserList().find((user) => user.getUsername()==id&&user.matchPassword(pas));
     }catch(error){
         let foundUser = undefined;
     }
@@ -60,10 +60,10 @@ app.put('/logout',(req,res) =>{
         res.json(true);
     }
 });
-app.put('/newacct', (req, res) => {
-    let id = req.query.id;
-    let pas = req.query.password; // get id and password from request
-    User.getUserList().push(new User(id,pas)); // This syntax might be redundant and/or missing arguments.
+app.post('/newacct', (req, res) => {
+    let id = req.body.username;
+    let pas = req.body.password; // get id and password from request
+    User.create({username: id, password: pas}); 
     
     
 });
