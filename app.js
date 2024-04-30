@@ -127,16 +127,30 @@ function addTaskToList(task) {
   // Star button
   const starBtn = document.createElement('button');
   starBtn.textContent = task.starred ? '★' : '☆';
+  starBtn.classList.add('star-btn');
+  starBtn.classList.add('clicked');
   starBtn.addEventListener('click', () => {
     task.starred = !task.starred;
     starBtn.textContent = task.starred ? '★' : '☆';
+    starBtn.classList.toggle('clicked');
     renderAndSortTasks();
     saveTasks();
   });
 
   // Task text
-  const taskText = document.createElement('span');
+   const taskText = document.createElement('span');
   taskText.textContent = task.text;
+  taskText.addEventListener('click', () => {
+    const descriptionInput = document.createElement('input');
+    descriptionInput.type = 'text';
+    descriptionInput.value = task.description || '';
+    descriptionInput.addEventListener('blur', () => {
+      task.description = descriptionInput.value.trim();
+      saveTasks();
+    });
+    taskItem.replaceChild(descriptionInput, taskText);
+    descriptionInput.focus();
+  });
 
   // Due date
   const dueDateSpan = document.createElement('span');
