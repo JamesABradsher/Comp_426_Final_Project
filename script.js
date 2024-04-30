@@ -9,6 +9,8 @@ const loginError = document.getElementById('login-error');
 const questionInput = document.getElementById('question-input');
 const askBtn = document.getElementById('ask-btn');
 const answerDisplay = document.getElementById('answer-display');
+const logoutBtn = document.getElementById('logout-btn');
+const url = "https://localhost:3000/"
 
 let tasks = [];
 let loggedIn = false; // change to test login functionality
@@ -23,7 +25,7 @@ loginBtn.addEventListener('click', () => {
 });
 
 function loginUser(username = "admin", password = "admin") {
-    fetch('/login', {
+    fetch(url + '/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +56,7 @@ function loginUser(username = "admin", password = "admin") {
   
 
   function createNewUser(username, password) {
-  fetch('/users', {
+  fetch(url + '/newacct', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -258,7 +260,7 @@ function sortAndRenderTasks() {
 }
 
 function saveTasks() {
-    fetch('/tasks', {
+    fetch(url + '/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -277,7 +279,7 @@ function saveTasks() {
   }
   
   function getTasks() {
-    fetch('/tasks', {
+    fetch(url + '/tasks', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -292,6 +294,20 @@ function saveTasks() {
       console.error('Error fetching tasks:', error);
     });
   }
+
+logoutBtn.addEventListener('click', () => {
+  fetch(url + '/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to logout');
+    }
+  })
+});
 
 //----------------------------------------------------------------------------------------------------------------------------
 const newsToggle = document.getElementById('news-toggle');
