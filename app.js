@@ -13,7 +13,6 @@ const answerDisplay = document.getElementById('answer-display');
 let tasks = [];
 let loggedIn = false; // change to test login functionality
 
-
 loginBtn.addEventListener('click', () => {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
