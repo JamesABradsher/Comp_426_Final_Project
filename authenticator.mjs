@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 
 app.post('/login', (req, res) => {
-    let id = req.body.username;
-    let pas = req.body.password; // get id and password from request
+    let uname = req.body.username;
+    let pas = req.body.password; // get username and password from request
     try{
-        let foundUser = User.getUserList().find((user) => user.getUsername()==id&&user.matchPassword(pas));
+        let foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
     }catch(error){
         let foundUser = undefined;
     }
@@ -28,7 +28,7 @@ app.post('/login', (req, res) => {
     }
     else{ // if a user exists with that login info
         let val = Math.random()+1;
-        res.cookie(id,val); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
+        res.cookie(uname,val); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
         foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in. 
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
         res.json(true);
@@ -39,12 +39,12 @@ app.post('/login', (req, res) => {
     
 });
 app.post('/logout',(req,res) =>{
-    let id = req.body.username;
-    let pas = req.body.password; // get id and password from request
+    let uname = req.body.username;
+    let pas = req.body.password; // get uname and password from request
     const cookies = req.cookies; // gets the cookies held by the client
-    let val = cookies[id];
+    let val = cookies[uname];
     try{
-        let foundUser = User.getUserList().find((user) => user.getUsername()==id&&user.matchPassword(pas));
+        let foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
     }catch(error){
         let foundUser = undefined;
     }
@@ -61,9 +61,9 @@ app.post('/logout',(req,res) =>{
     }
 });
 app.post('/newacct', (req, res) => {
-    let id = req.body.username;
-    let pas = req.body.password; // get id and password from request
-    User.create({username: id, password: pas}); 
+    let uname = req.body.username;
+    let pas = req.body.password; // get uname and password from request
+    User.create({username: uname, password: pas}); 
     
     
 });
