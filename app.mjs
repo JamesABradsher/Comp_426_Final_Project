@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import {Task} from './task.mjs';
 import {User} from './user.mjs';
 
