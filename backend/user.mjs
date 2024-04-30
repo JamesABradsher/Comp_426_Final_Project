@@ -98,7 +98,7 @@ export class User {
 
     //Replaces current task list with supplied task list
     setTaskList(tasklist) {
-        this.#task_list = Object.keys(tasklist).map(k => {k: tasklist[k]});
+        this.#task_list = tasklist;
     }
 
     // Adds task to task list
