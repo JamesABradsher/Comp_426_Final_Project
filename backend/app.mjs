@@ -38,6 +38,17 @@ app.post('/user', (req, res) => {
     res.status(201).json(user.json());
 });
 
+app.put('/user/:id', (req, res) => {
+    let user = User.getUser(parseInt(req.params.id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    res.status(201).json(user.updateUser(req.body));
+});
+
 // Creates a new task for a given user
 app.post('/user/:id/task', (req, res) => {
     let user = User.getUser(parseInt(req.params.id));
