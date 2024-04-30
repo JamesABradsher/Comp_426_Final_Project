@@ -100,10 +100,12 @@ addTaskBtn.addEventListener('click', () => {
   }
 });
 
+  const completedToggle = document.getElementById('completed-toggle');
+  const completedContainer = document.getElementById('completed-container');
 
-completedToggle.addEventListener('click', () => {
-  completedContainer.classList.toggle('hidden');
-});
+  completedToggle.addEventListener('click', () => {
+    completedContainer.classList.toggle('hidden');
+  });
 
 // Add task to the list
 function addTaskToList(task) {
@@ -335,3 +337,6 @@ function fetchNewsHeadlines() {
 }
 
 fetchNewsHeadlines();
+
+
+//----------------------------------------------------------------------------------------------------------------------------

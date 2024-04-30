@@ -2,45 +2,91 @@ body {
     background-color: #333;
     color: #f5f5f5;
     font-family: Arial, sans-serif;
-  }
-  
-  .container {
-    max-width: 600px;
+}
+
+.container {
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-  }
-  
-  header {
+}
+
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
-  
-  .task-input {
+}
+
+header h1:hover {
+    color: #ff6600;
+    cursor:default;
+}
+
+.task-input {
     display: flex;
     margin-bottom: 10px;
-  }
-  
-  #task-input {
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1d1d1d;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#username {
+    padding: 10px;
+    width: 150px;
+    box-sizing: border-box; 
+    border-radius: 5px;
+}
+
+#password {
+    padding: 10px;
+    width: 150px;
+    box-sizing: border-box; 
+    border-radius: 5px;
+}
+
+#login-btn {
+    padding: 10px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#login-btn:hover {
+    background-color: #666;
+    color:#e4730f;
+}
+
+
+#task-input {
     flex-grow: 1;
     padding: 5px;
     background-color: #444;
     color: #f5f5f5;
     border: none;
     border-radius: 5px;
-  }
-  
-  #due-date-input {
+}
+
+#due-date-input {
     margin-left: 10px;
     padding: 5px;
     background-color: #444;
     color: #f5f5f5;
     border: none;
     border-radius: 5px;
-  }
-  
-  #add-task-btn {
+}
+
+#add-task-btn {
     margin-left: 10px;
     padding: 5px 10px;
     background-color: #555;
@@ -48,14 +94,14 @@ body {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-  }
-  
-  #task-list {
+}
+
+#task-list {
     list-style-type: none;
     padding: 0;
-  }
-  
-  #task-list li {
+}
+
+#task-list li {
     display: flex;
     align-items: center;
     padding: 10px;
@@ -63,28 +109,28 @@ body {
     border-radius: 5px;
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  #task-list li input[type="text"] {
+#task-list li input[type="text"] {
     flex-grow: 1;
     padding: 5px;
     background-color: #444;
     color: #f5f5f5;
     border: none;
     border-radius: 5px;
-  }
-  
-  #task-list li span {
+}
+
+#task-list li span {
     flex-grow: 1;
-  }
-  
-  #task-list li .due-date {
+}
+
+#task-list li .due-date {
     margin-left: 10px;
     font-size: 12px;
     color: #bbb;
-  }
-  
-  #task-list li button {
+}
+
+#task-list li button {
     margin-left: 10px;
     padding: 5px 10px;
     background-color: #555;
@@ -92,9 +138,9 @@ body {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-  }
+}
 
-  #task-list li button.star-btn {
+#task-list li button.star-btn {
     padding: 5px;
     background-color:transparent;
     color: #333; /* Darker text color */
@@ -111,23 +157,22 @@ body {
     color: #e4730f;
 }
 
-  
-  .hidden {
+.hidden {
     display: none;
-  }
+}
 
-  .error-message {
+.error-message {
     display: none;
     color: red;
     font-weight: bold;
     margin-top: 10px;
-  }
+}
 
 
-  .news-dropdown {
+.news-dropdown {
     position: relative;
-  }
-  
+}
+
 #news-toggle {
     background-color: #555;
     color: #f5f5f5;
@@ -135,12 +180,14 @@ body {
     padding: 10px 15px;
     cursor: pointer;
     border-radius: 5px;
+    transition: border-color 0.3s;
 }
 
 #news-toggle:hover {
     background-color: #666;
+    color: #e4730f;
 }
-  
+
 #news-container {
     position: absolute;
     top: 100%;
@@ -150,43 +197,46 @@ body {
     max-height: 300px;
     overflow-y: auto;
     width: 300px; 
+    border-radius: 5px;
 }
-  
-  #news-list {
+
+#news-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-  }
-  
-  #news-list li {
+}
+
+#news-list li {
     padding: 10px;
     border-bottom: 1px solid #666;
     cursor: pointer;
-  }
-  
-  #news-list li:hover {
-    background-color: #555;
-  }
+}
 
-  .completed-dropdown {
+#news-list li:hover {
+    background-color: #555;
+}
+
+.completed-dropdown {
     position: relative;
     margin-top: 10px;
-  }
-  
-  #completed-toggle {
+}
+
+#completed-toggle {
     background-color: #555;
     color: #f5f5f5;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
     border-radius: 5px;
-  }
+    border: 2px;
+}
 
-    #completed-toggle:hover {
-        background-color: #666;
-    }
-  
-  #completed-container {
+#completed-toggle:hover {
+    background-color: #666;
+    color: #e4730f;
+}
+
+#completed-container {
     position: absolute;
     top: 100%;
     left: 0;
@@ -195,25 +245,24 @@ body {
     max-height: 300px;
     overflow-y: auto;
     display: none;
-  }
-  
-  #completed-container.show {
+}
+
+#completed-container.show {
     display: block;
-  }
-  
-  #completed-list {
+}
+
+#completed-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-  }
-  
-  #completed-list li {
+}
+
+#completed-list li {
     padding: 10px;
     border-bottom: 1px solid #666;
     cursor: pointer;
-  }
-  
-  #completed-list li:hover {
+}
+
+#completed-list li:hover {
     background-color: #555;
-  }
-  
+}
