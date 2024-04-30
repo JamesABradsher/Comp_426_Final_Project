@@ -11,9 +11,9 @@ const askBtn = document.getElementById('ask-btn');
 const answerDisplay = document.getElementById('answer-display');
 
 let tasks = [];
-let loggedIn = false; // change to  to test login functionality
+let loggedIn = false; // change to test login functionality
 
-// Login functionality
+
 loginBtn.addEventListener('click', () => {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
@@ -34,17 +34,14 @@ function loginUser(username = "admin", password = "admin") {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        // Login successful
         loggedIn = true;
         loginContainer.classList.add('hidden');
         taskContainer.classList.remove('hidden');
         loginError.classList.add('hidden');
-        getTasks(); // Fetch tasks for the logged-in user
+        getTasks(); 
       } else if (data.error === 'user_not_found') {
-        // User doesn't exist, create a new user
         createNewUser(username, password);
       } else {
-        // Login failed for other reasons
         loginError.textContent = 'Login failed. Please check your username and password.';
         loginError.classList.remove('hidden');
       }
@@ -68,14 +65,12 @@ function loginUser(username = "admin", password = "admin") {
   .then(response => response.json())
   .then(data => {
     if (data.success) {
-      // User creation successful, proceed with login
       loggedIn = true;
       loginContainer.classList.add('hidden');
       taskContainer.classList.remove('hidden');
       loginError.classList.add('hidden');
-      getTasks(); // Fetch tasks for the logged-in user
+      getTasks(); 
     } else {
-      // User creation failed
       loginError.classList.remove('hidden');
       loginError.textContent = data.error || 'Failed to create user';
     }
@@ -94,20 +89,20 @@ addTaskBtn.addEventListener('click', () => {
   if (taskText) {
     const newTask = { text: taskText, dueDate, completed: false, starred: false };
     tasks.push(newTask);
-    renderAndSortTasks(); // Render and sort tasks after adding
+    renderAndSortTasks();
     taskInput.value = '';
     dueDateInput.value = '';
   }
 });
 
 taskInput.addEventListener('keydown', (event) => {
-  if (event.keyCode === 13) { // Check if the Enter key is pressed
+  if (event.keyCode === 13) {
     const taskText = taskInput.value.trim();
     const dueDate = dueDateInput.value;
     if (taskText) {
       const newTask = { text: taskText, dueDate, completed: false, starred: false };
       tasks.push(newTask);
-      renderAndSortTasks(); // Render and sort tasks after adding
+      renderAndSortTasks(); 
       taskInput.value = '';
       dueDateInput.value = '';
     }
@@ -119,11 +114,10 @@ taskInput.addEventListener('keydown', (event) => {
   const completedList = document.getElementById('completed-list');
 
   completedToggle.addEventListener('click', () => {
-    console.log('Toggle button clicked'); // Log the click event
+    console.log('Toggle button clicked');
     completedContainer.classList.toggle('hidden');
   });
 
-// Add task to the list
 function addTaskToList(task) {
   const taskItem = document.createElement('li');
 
@@ -232,10 +226,9 @@ renderTasks();
 
 function renderAndSortTasks() {
   sortAndRenderTasks();
-  saveTasks(); // Save the sorted tasks
+  saveTasks(); 
 }
 
-// Sort and render tasks
 function sortAndRenderTasks() {
   taskList.innerHTML = '';
   const completedList = document.getElementById('completed-list');
@@ -256,7 +249,6 @@ function sortAndRenderTasks() {
     return 0;
   });
 
-  // Render tasks
   tasks.forEach(task => {
     if (task.completed) {
       addTaskToCompletedList(task);
@@ -266,8 +258,6 @@ function sortAndRenderTasks() {
   });
 }
 
-
-// Save tasks to server
 function saveTasks() {
     fetch('/api/tasks', {
       method: 'POST',
@@ -287,7 +277,6 @@ function saveTasks() {
     });
   }
   
-  // Get tasks from server
   function getTasks() {
     fetch('/api/tasks', {
       method: 'GET',
@@ -320,9 +309,8 @@ newsToggle.addEventListener('click', () => {
   }
 });
 
-// Fetch news headlines from NewsAPI
 function fetchNewsHeadlines() {
-  const apiKey = 'a597f6efe3a641e5b1954ea6f92f02d7'; // Replace with your actual NewsAPI key
+  const apiKey = 'a597f6efe3a641e5b1954ea6f92f02d7';
   const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
 
   fetch(url)
@@ -349,5 +337,10 @@ function fetchNewsHeadlines() {
 
 fetchNewsHeadlines();
 
-
 //----------------------------------------------------------------------------------------------------------------------------
+//Attestation
+
+// I, Kameron Thomas, Used ChatGBT[1] to aid in the creating this code, I also used the documentation and api from newsapi.org[2] to get the news headlines
+
+// [1] OpenAI. (2024). ChatGPT (3.5) [Large language model]. https://chat.openai.com
+// [2] News API. (2024). News API. https://newsapi.org
