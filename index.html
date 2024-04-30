@@ -16,6 +16,12 @@
           <ul id="news-list"></ul>
         </div>
       </div>
+      <div class="completed-dropdown">
+        <button type="button" id="completed-toggle">Completed Tasks</button>
+        <div id="completed-container" class="completed-container hidden">
+          <ul id="completed-list"></ul>
+        </div>
+      </div>
     </header>
     <div class="login-container">
       <input type="text" id="username" placeholder="Username">
@@ -23,7 +29,7 @@
       <button type="button" id="login-btn">Login</button>
       <span id="login-error" class="error-message">Invalid username or password</span>
     </div>
-    <div class="task-container hidden">
+    <div class="task-container">
       <div class="task-input">
         <input type="text" id="task-input" placeholder="Add a new task">
         <input type="date" id="due-date-input">

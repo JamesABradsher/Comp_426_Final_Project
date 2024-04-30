@@ -23,8 +23,7 @@ loginBtn.addEventListener('click', () => {
   }
 });
 
-function loginUser(username, password) {
-    // Make a POST request to the login API endpoint
+function loginUser(username = "admin", password = "admin") {
     fetch('/api/login', {
       method: 'POST',
       headers: {
@@ -95,58 +94,151 @@ addTaskBtn.addEventListener('click', () => {
   if (taskText) {
     const newTask = { text: taskText, dueDate, completed: false, starred: false };
     tasks.push(newTask);
-    addTaskToList(newTask);
+    renderAndSortTasks(); // Render and sort tasks after adding
     taskInput.value = '';
     dueDateInput.value = '';
-    saveTasks(); // Replace with a function to save tasks to the server
   }
+});
+
+
+completedToggle.addEventListener('click', () => {
+  completedContainer.classList.toggle('hidden');
 });
 
 // Add task to the list
 function addTaskToList(task) {
   const taskItem = document.createElement('li');
+
+  // Completed checkbox
+  const completedCheckbox = document.createElement('input');
+  completedCheckbox.type = 'checkbox';
+  completedCheckbox.checked = task.completed;
+  completedCheckbox.addEventListener('change', () => {
+    task.completed = completedCheckbox.checked;
+    if (task.completed) {
+      addTaskToCompletedList(task);
+    } else {
+      removeTaskFromCompletedList(task);
+    }
+    saveTasks();
+    renderTasks();
+  });
+
+  // Star button
   const starBtn = document.createElement('button');
   starBtn.textContent = task.starred ? '★' : '☆';
   starBtn.addEventListener('click', () => {
     task.starred = !task.starred;
     starBtn.textContent = task.starred ? '★' : '☆';
-    sortAndRenderTasks();
-    saveTasks(); // Replace with a function to save tasks to the server
+    renderAndSortTasks();
+    saveTasks();
   });
 
+  // Task text
   const taskText = document.createElement('span');
   taskText.textContent = task.text;
 
+  // Due date
   const dueDateSpan = document.createElement('span');
   dueDateSpan.textContent = `Due: ${task.dueDate}`;
   dueDateSpan.classList.add('due-date');
 
+  // Delete button
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Delete';
   deleteBtn.addEventListener('click', () => {
     tasks = tasks.filter(t => t !== task);
-    taskItem.remove();
-    saveTasks(); // Replace with a function to save tasks to the server
+    saveTasks();
+    renderTasks();
   });
 
+  taskItem.appendChild(completedCheckbox);
   taskItem.appendChild(starBtn);
   taskItem.appendChild(taskText);
   taskItem.appendChild(dueDateSpan);
   taskItem.appendChild(deleteBtn);
 
-  taskList.appendChild(taskItem);
+  if (task.completed) {
+    addTaskToCompletedList(task);
+  } else {
+    // Check if the task is starred, if so, add it to the top of the list
+    const index = tasks.findIndex(t => t === task);
+    if (task.starred && index > 0) {
+      tasks.splice(index, 1);
+      tasks.unshift(task);
+      renderTasks();
+    } else {
+      taskList.appendChild(taskItem);
+    }
+  }
+}
+
+function addTaskToCompletedList(task) {
+  const completedList = document.getElementById('completed-list');
+  const completedItem = document.createElement('li');
+  completedItem.textContent = task.text;
+  completedList.appendChild(completedItem);
+}
+
+function removeTaskFromCompletedList(task) {
+  const completedList = document.getElementById('completed-list');
+  const completedItems = Array.from(completedList.children);
+  const index = completedItems.findIndex(item => item.textContent === task.text);
+  if (index !== -1) {
+    completedList.removeChild(completedItems[index]);
+  }
+}
+
+function renderTasks() {
+  taskList.innerHTML = '';
+  tasks.forEach(task => {
+    addTaskToList(task);
+  });
+}
+
+renderTasks();
+
+function renderAndSortTasks() {
+  sortAndRenderTasks();
+  saveTasks(); // Save the sorted tasks
 }
 
 // Sort and render tasks
 function sortAndRenderTasks() {
   taskList.innerHTML = '';
+  const completedList = document.getElementById('completed-list');
+  completedList.innerHTML = '';
+
+  // Sort tasks based on starred status and due date
   tasks.sort((a, b) => {
+    // Tasks without a due date and not starred should be moved to the bottom
+    if (!a.dueDate && !a.starred) return 1;
+    if (!b.dueDate && !b.starred) return -1;
+
+    // Sort by starred status first
     if (a.starred && !b.starred) return -1;
     if (!a.starred && b.starred) return 1;
-    return new Date(a.dueDate) - new Date(b.dueDate);
+
+    // If both tasks are starred or both are not starred, sort by due date
+    if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
+
+    // If one task has a due date and the other doesn't, prioritize the one with a due date
+    if (a.dueDate) return -1;
+    if (b.dueDate) return 1;
+
+    return 0;
   });
-  tasks.forEach(task => addTaskToList(task));
+
+  // Render tasks
+  tasks.forEach(task => {
+    if (task.completed) {
+      addTaskToCompletedList(task);
+    } else {
+      addTaskToList(task);
+    }
+  });
 }
+
 
 // Save tasks to server
 function saveTasks() {
@@ -179,7 +271,7 @@ function saveTasks() {
     .then(response => response.json())
     .then(data => {
       tasks = data.tasks;
-      sortAndRenderTasks();
+      renderAndSortTasks();
     })
     .catch(error => {
       console.error('Error fetching tasks:', error);

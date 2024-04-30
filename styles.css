@@ -97,15 +97,19 @@ body {
     position: relative;
   }
   
-  #news-toggle {
+#news-toggle {
     background-color: #555;
     color: #f5f5f5;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
-  }
+}
+
+#news-toggle:hover {
+    background-color: #666;
+}
   
-  #news-container {
+#news-container {
     position: absolute;
     top: 100%;
     right: 0;
@@ -113,7 +117,8 @@ body {
     z-index: 1;
     max-height: 300px;
     overflow-y: auto;
-  }
+    width: 300px; 
+}
   
   #news-list {
     list-style-type: none;
@@ -130,3 +135,52 @@ body {
   #news-list li:hover {
     background-color: #555;
   }
+
+  .completed-dropdown {
+    position: relative;
+    margin-top: 10px;
+  }
+  
+  #completed-toggle {
+    background-color: #555;
+    color: #f5f5f5;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+
+    #completed-toggle:hover {
+        background-color: #666;
+    }
+  
+  #completed-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+  }
+  
+  #completed-container.show {
+    display: block;
+  }
+  
+  #completed-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #completed-list li {
+    padding: 10px;
+    border-bottom: 1px solid #666;
+    cursor: pointer;
+  }
+  
+  #completed-list li:hover {
+    background-color: #555;
+  }
+  
