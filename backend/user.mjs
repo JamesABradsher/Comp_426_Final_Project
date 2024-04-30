@@ -96,6 +96,11 @@ export class User {
 
     /** Functions for interfacing with tasks */
 
+    //Replaces current task list with supplied task list
+    setTaskList(tasklist) {
+        this.#task_list = Object.keys(tasklist).map(k => {k: tasklist[k]});
+    }
+
     // Adds task to task list
     addTask(data) {
         if (data == undefined) {
@@ -142,43 +147,43 @@ export class User {
 
     /** Methods for re-ordering task list */
 
-    #swapTasks(a, b) {
-        let temp = this.#task_list[a];
-        this.#task_list[a] = this.#task_list[b];
-        this.#task_list[b] = temp; 
-    }
+    // #swapTasks(a, b) {
+    //     let temp = this.#task_list[a];
+    //     this.#task_list[a] = this.#task_list[b];
+    //     this.#task_list[b] = temp; 
+    // }
 
-    #getTaskIndex(id) {
-        return this.#task_list.indexOf(this.getTaskById(id));
-    }
+    // #getTaskIndex(id) {
+    //     return this.#task_list.indexOf(this.getTaskById(id));
+    // }
 
-    promoteTask(id) {
-        if (this.#getTaskIndex(id) > 0 && this.#getTaskIndex(id) <= this.#task_list.length - 1) {
-            this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id--) );
-        }
-    }
+    // promoteTask(id) {
+    //     if (this.#getTaskIndex(id) > 0 && this.#getTaskIndex(id) <= this.#task_list.length - 1) {
+    //         this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id--) );
+    //     }
+    // }
 
-    demoteTask(id) {
-        if (this.#getTaskIndex(id) >= 0 && this.#getTaskIndex(id) < this.#task_list.length - 1) {
-            this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id++));
-        }
-    }
+    // demoteTask(id) {
+    //     if (this.#getTaskIndex(id) >= 0 && this.#getTaskIndex(id) < this.#task_list.length - 1) {
+    //         this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id++));
+    //     }
+    // }
 
-    flagTask(id, shouldFlag) {
-        if (shouldFlag) {
-            let index = this.#getTaskIndex(id);
-            this.#swapTasks(id, this.#task_list[this.#nextFlaggedIndex++]);
-            this.getTaskById(id).setFlagged(true);
+    // flagTask(id, shouldFlag) {
+    //     if (shouldFlag) {
+    //         let index = this.#getTaskIndex(id);
+    //         this.#swapTasks(id, this.#task_list[this.#nextFlaggedIndex++]);
+    //         this.getTaskById(id).setFlagged(true);
 
-            // bubbles up swapped item to top of list bc i'm lazy and dont want to think of a better way to do this
-            while (index > this.#nextFlaggedIndex+1) {
-                this.#swapTasks(index, --index);
-            }
-        } else {
-            this.getTaskById(id).setFlagged(false);
-            this.#nextFlaggedIndex--;
-        }
-    }
+    //         // bubbles up swapped item to top of list bc i'm lazy and dont want to think of a better way to do this
+    //         while (index > this.#nextFlaggedIndex+1) {
+    //             this.#swapTasks(index, --index);
+    //         }
+    //     } else {
+    //         this.getTaskById(id).setFlagged(false);
+    //         this.#nextFlaggedIndex--;
+    //     }
+    // }
 
     
 }
