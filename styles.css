@@ -1,0 +1,291 @@
+body {
+    background-color: #333;
+    color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    color: #e4730f;
+}
+
+.task-input {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1d1d1d;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#username {
+    padding: 10px;
+    width: 150px;
+    box-sizing: border-box; 
+    border-radius: 5px;
+}
+
+#password {
+    padding: 10px;
+    width: 150px;
+    box-sizing: border-box; 
+    border-radius: 5px;
+}
+
+#login-btn {
+    padding: 10px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#login-btn:hover {
+    background-color: #666;
+    color:#e4730f;
+}
+
+
+#task-input {
+    flex-grow: 1;
+    padding: 5px;
+    background-color: #444;
+    color: #f5f5f5;
+    border: none;
+    border-radius: 5px;
+}
+
+#due-date-input {
+    margin-left: 10px;
+    padding: 5px;
+    background-color: #444;
+    color: #f5f5f5;
+    border: none;
+    border-radius: 5px;
+}
+
+#due-date-input:hover{
+    background-color: #666;
+    color:#e4730f;
+}
+
+#add-task-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #555;
+    color: #f5f5f5;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#add-task-btn:hover {
+    background-color: #666;
+    color: #e4730f;
+}
+
+#task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#task-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#task-list li input[type="text"] {
+    flex-grow: 1;
+    padding: 5px;
+    background-color: #444;
+    color: #f5f5f5;
+    border: none;
+    border-radius: 5px;
+}
+
+#task-list li span {
+    flex-grow: 1;
+}
+
+#task-list li .due-date {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #bbb;
+}
+
+#task-list li button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #555;
+    color: #f5f5f5;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#task-list li button:hover {
+    background-color: #666;
+    color: #e4730f;
+}
+
+#task-list li button.star-btn {
+    padding: 5px;
+    background-color:transparent;
+    color: #333; /* Darker text color */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#task-list li button.clicked {
+    color: #e4730f;
+}
+
+#task-list li button.clicked:hover {
+    color: #e4730f;
+}
+
+.hidden {
+    display: none;
+}
+
+.error-message {
+    display: none;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+
+.news-dropdown {
+    position: relative;
+}
+
+#news-toggle {
+    background-color: #555;
+    color: #f5f5f5;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+#news-toggle:hover {
+    background-color: #666;
+    color: #e4730f;
+}
+
+#news-container {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #444;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 300px; 
+    border-radius: 5px;
+}
+
+#news-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#news-list li {
+    padding: 10px;
+    border-bottom: 1px solid #666;
+    cursor: pointer;
+}
+
+#news-list li:hover {
+    background-color: #555;
+    color:#e4730f;
+}
+
+.completed-dropdown {
+    position: relative;
+    margin-top: 10px;
+}
+
+#completed-toggle {
+    background-color: #555;
+    color: #f5f5f5;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px;
+}
+
+#completed-toggle:hover {
+    background-color: #666;
+    color: #e4730f;
+}
+
+#completed-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+}
+
+.completed-container.show {
+    display: block; 
+  }
+
+#completed-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#completed-list li {
+    padding: 10px;
+    border-bottom: 1px solid #666;
+    cursor: pointer;
+}
+
+#completed-list li:hover {
+    background-color: #555;
+}
+
+/* 
+Attestation
+
+I, Kameron Thomas, Used ChatGBT[1] to aid in the creation of this code
+
+[1] OpenAI. (2024). ChatGPT (3.5) [Large language model]. https://chat.openai.com
+*/

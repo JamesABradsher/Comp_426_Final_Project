@@ -1,0 +1,24 @@
+{
+  "name": "task_manager",
+  "version": "1.0.0",
+  "description": "Task list manager backend",
+  "main": "app.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesABradsher/Comp_426_Final_Project.git"
+  },
+  "author": "James Bradsher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamesABradsher/Comp_426_Final_Project/issues"
+  },
+  "homepage": "https://github.com/JamesABradsher/Comp_426_Final_Project#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0"
+  }
+}
