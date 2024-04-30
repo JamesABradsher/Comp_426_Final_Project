@@ -17,9 +17,8 @@ header {
     margin-bottom: 20px;
 }
 
-header h1:hover {
-    color: #ff6600;
-    cursor:default;
+header h1 {
+    color: #e4730f;
 }
 
 .task-input {
@@ -86,6 +85,11 @@ header h1:hover {
     border-radius: 5px;
 }
 
+#due-date-input:hover{
+    background-color: #666;
+    color:#e4730f;
+}
+
 #add-task-btn {
     margin-left: 10px;
     padding: 5px 10px;
@@ -94,6 +98,11 @@ header h1:hover {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+}
+
+#add-task-btn:hover {
+    background-color: #666;
+    color: #e4730f;
 }
 
 #task-list {
@@ -138,6 +147,11 @@ header h1:hover {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+}
+
+#task-list li button:hover {
+    background-color: #666;
+    color: #e4730f;
 }
 
 #task-list li button.star-btn {
@@ -214,6 +228,7 @@ header h1:hover {
 
 #news-list li:hover {
     background-color: #555;
+    color:#e4730f;
 }
 
 .completed-dropdown {
@@ -247,9 +262,9 @@ header h1:hover {
     display: none;
 }
 
-#completed-container.show {
-    display: block;
-}
+.completed-container.show {
+    display: block; 
+  }
 
 #completed-list {
     list-style-type: none;

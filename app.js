@@ -100,10 +100,26 @@ addTaskBtn.addEventListener('click', () => {
   }
 });
 
+taskInput.addEventListener('keydown', (event) => {
+  if (event.keyCode === 13) { // Check if the Enter key is pressed
+    const taskText = taskInput.value.trim();
+    const dueDate = dueDateInput.value;
+    if (taskText) {
+      const newTask = { text: taskText, dueDate, completed: false, starred: false };
+      tasks.push(newTask);
+      renderAndSortTasks(); // Render and sort tasks after adding
+      taskInput.value = '';
+      dueDateInput.value = '';
+    }
+  }
+});
+
   const completedToggle = document.getElementById('completed-toggle');
   const completedContainer = document.getElementById('completed-container');
+  const completedList = document.getElementById('completed-list');
 
   completedToggle.addEventListener('click', () => {
+    console.log('Toggle button clicked'); // Log the click event
     completedContainer.classList.toggle('hidden');
   });
 
@@ -225,20 +241,15 @@ function sortAndRenderTasks() {
   const completedList = document.getElementById('completed-list');
   completedList.innerHTML = '';
 
-  // Sort tasks based on starred status and due date
   tasks.sort((a, b) => {
-    // Tasks without a due date and not starred should be moved to the bottom
     if (!a.dueDate && !a.starred) return 1;
     if (!b.dueDate && !b.starred) return -1;
 
-    // Sort by starred status first
     if (a.starred && !b.starred) return -1;
     if (!a.starred && b.starred) return 1;
 
-    // If both tasks are starred or both are not starred, sort by due date
     if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
 
-    // If one task has a due date and the other doesn't, prioritize the one with a due date
     if (a.dueDate) return -1;
     if (b.dueDate) return 1;
 
