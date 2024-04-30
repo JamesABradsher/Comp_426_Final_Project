@@ -7,6 +7,7 @@ export class User {
     #username;
     #password;
     #sessionValue;
+    #nextFlaggedIndex = 0;
 
     static next_id = 1;
     static users = [];
@@ -108,6 +109,15 @@ export class User {
         return task;
     }
 
+    updateTask(id, data) {
+        let task = this.getTaskById(id);
+        task.update(data); // Assumes task has some update function.
+    }
+
+    getTaskList() {
+        return this.#task_list.map(t => t.json()); // Assumes the task have some json function
+    }
+
     getTaskIds() {
         return this.#task_list.map(t => t.getId());
     }
@@ -133,20 +143,9 @@ export class User {
     /** Methods for re-ordering task list */
 
     #swapTasks(a, b) {
-        if (a == undefined || typeof a != 'number') {
-            return null;
-        }
-
-        if (b == undefined || typeof b != 'number') {
-            return null;
-        }
-
-        let task_a = this.#getTaskIndex(a);
-        let task_b = this.#getTaskIndex(b);
-
-        let temp = this.#task_list[task_a];
-        this.#task_list[task_a] = this.#task_list[task_b];
-        this.#task_list[task_b] = temp; 
+        let temp = this.#task_list[a];
+        this.#task_list[a] = this.#task_list[b];
+        this.#task_list[b] = temp; 
     }
 
     #getTaskIndex(id) {
@@ -155,13 +154,31 @@ export class User {
 
     promoteTask(id) {
         if (this.#getTaskIndex(id) > 0 && this.#getTaskIndex(id) <= this.#task_list.length - 1) {
-            this.#swapTasks(id, id--);
+            this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id--) );
         }
     }
 
     demoteTask(id) {
         if (this.#getTaskIndex(id) >= 0 && this.#getTaskIndex(id) < this.#task_list.length - 1) {
-            this.#swapTasks(id, id++);
+            this.#swapTasks(this.#getTaskIndex(id), this.#getTaskIndex(id++));
         }
     }
+
+    flagTask(id, shouldFlag) {
+        if (shouldFlag) {
+            let index = this.#getTaskIndex(id);
+            this.#swapTasks(id, this.#task_list[this.#nextFlaggedIndex++]);
+            this.getTaskById(id).setFlagged(true);
+
+            // bubbles up swapped item to top of list bc i'm lazy and dont want to think of a better way to do this
+            while (index > this.#nextFlaggedIndex+1) {
+                this.#swapTasks(index, --index);
+            }
+        } else {
+            this.getTaskById(id).setFlagged(false);
+            this.#nextFlaggedIndex--;
+        }
+    }
+
+    
 }

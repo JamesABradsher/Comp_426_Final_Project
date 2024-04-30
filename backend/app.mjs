@@ -12,26 +12,23 @@ app.use(bodyParser.json());
 /** RESTful commands not necessarily final, mostly just for testing purposes */
 
 
-/** 
- * After some thinking, i think a better way to handle the urls 
- * would be to have whatever final app.mjs we come up with 
- * store the user's id after authentication, then the urls can just reference 
- * task id's but we can get around to that later
- */
-
+// Gets List of Users
 app.get('/users', (req, res) => {
     res.json(User.getUserList());
 });
 
+// Gets list of Tasks in ordered array
 app.get('/user/:id/tasks', (req, res) => {
-    let user = User.getUser(parseInt(req.params.id))
-    if (!user) {
-        res.status(400).send("Not Found");
+    let user = User.getUser(parseInt(req.params.id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
         return;
     }
-    res.json(user.getTaskIds());
+    res.json(user.getTaskList());
 });
 
+// Creates a new user
 app.post('/user', (req, res) => {
     let user = User.create(req.body);
     if (!user) {
@@ -41,10 +38,12 @@ app.post('/user', (req, res) => {
     res.status(201).json(user.json());
 });
 
+// Creates a new task for a given user
 app.post('/user/:id/task', (req, res) => {
     let user = User.getUser(parseInt(req.params.id));
-    if (!user) {
-        res.status(400).send("User Not Found");
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
         return;
     }
 
@@ -55,6 +54,78 @@ app.post('/user/:id/task', (req, res) => {
     }
 
     res.status(201).json(task);
+});
+
+// Updates the specified tasks data
+app.put('/user/:u_id/task/:t_id', (req, res) => {
+    let user = User.getUser(parseInt(req.params.u_id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    let task = user.getTaskById(parseInt(req.params.t_id))
+    if (!task) {
+        res.status(400).send("Task Not Found");
+        return;
+    }
+
+    task.update(req.body);
+});
+
+// Deletes Specified task
+app.delete('/user/:u_id/task/:t_id', (req, res) => {
+    let user = User.getUser(parseInt(req.params.u_id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    res.status(201).json(user.removeTask(parseInt(req.params.t_id)));
+});
+
+// Moves the specified task up one position in the task list
+app.put('/user/:u_id/task/:t_id/promote', (req, res) => {
+    let user = User.getUser(parseInt(req.params.u_id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    user.promoteTask(parseInt(req.params.t_id));
+});
+
+// Moves the specified task down one position in the task list
+app.put('/user/:u_id/task/:t_id/demote', (req, res) => {
+    let user = User.getUser(parseInt(req.params.u_id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    user.demoteTask(parseInt(req.params.t_id));
+});
+
+// Toggles whether the specified task is starred/flagged
+app.put('/user/:u_id/task/:t_id/star', (req, res) => {
+    let user = User.getUser(parseInt(req.params.u_id));
+    let session_data = getSessionData();
+    if (!user || session_data.username != user.getUsername() || session_data.sessionVal != user.getSessionVal()) {
+        res.status(400).send("User Not Valid");
+        return;
+    }
+
+    let task = user.getTaskById(parseInt(req.params.t_id))
+    if (!task) {
+        res.status(400).send("Task Not Found");
+        return;
+    }
+
+    user.flagTask(parseInt(req.params.t_id), !task.isFlagged());
 });
 
 app.listen(port, () => {
