@@ -306,6 +306,9 @@ logoutBtn.addEventListener('click', () => {
     if (!response.ok) {
       throw new Error('Failed to logout');
     }
+    loggedIn = false;
+    taskContainer.classList.add('hidden');
+    loginContainer.classList.remove('hidden');
   })
 });
 
