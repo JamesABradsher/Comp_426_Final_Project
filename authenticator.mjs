@@ -18,7 +18,7 @@ app.post('/login', (req, res) => {
     }catch(error){
         let foundUser = undefined;
     }
-    if (foundUser == undefined){
+    if (!foundUser){
         res.status(400).send("Bad login attempt");
         return;
     }
@@ -39,26 +39,17 @@ app.post('/login', (req, res) => {
     
 });
 app.post('/logout',(req,res) =>{
-    let uname = req.body.username;
-    let pas = req.body.password; // get uname and password from request
-    const cookies = req.cookies; // gets the cookies held by the client
-    let val = cookies[uname];
-    try{
-        let foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
-    }catch(error){
-        let foundUser = undefined;
+    const cookies = req.cookies;
+    for(const cookieName in cookies){
+        let uname = cookieName;
+        let val = cookies[cookieName];
+        let foundUser = User.getUserList().find((user) => user.getUsername()==uname && user.getSessionVal()==val);
+        if(foundUser){
+            foundUser.setSessionVal(0);
+        }
     }
-    if (foundUser == undefined){
-        res.status(400).send("Bad logout attempt");
-        return;
-    }
-    else if(foundUser.getSessionVal()!=val){
-        res.status(400).send("Client is not logged in");
-        return;
-    }else{
-        foundUser.setSessionVal(0);
-        res.json(true);
-    }
+    res.json(true);
+    
 });
 app.post('/newacct', (req, res) => {
     let uname = req.body.username;
