@@ -23,7 +23,7 @@ loginBtn.addEventListener('click', () => {
 });
 
 function loginUser(username = "admin", password = "admin") {
-    fetch('/api/login', {
+    fetch('/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ function loginUser(username = "admin", password = "admin") {
   
 
   function createNewUser(username, password) {
-  fetch('/api/users', {
+  fetch('/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -258,7 +258,7 @@ function sortAndRenderTasks() {
 }
 
 function saveTasks() {
-    fetch('/api/tasks', {
+    fetch('/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -277,7 +277,7 @@ function saveTasks() {
   }
   
   function getTasks() {
-    fetch('/api/tasks', {
+    fetch('/tasks', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
