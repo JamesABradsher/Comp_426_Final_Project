@@ -67,3 +67,19 @@ app.post('/newacct', (req, res) => {
     
     
 });
+
+/*
+// CODE FOR EXTRACTING USER FROM CLIENT REQUEST
+
+
+const cookies = req.cookies;
+for (const cookieName in cookies){ // check each cookie to see if information matches a user
+    let clientUser = User.getUserList().find((user) => (user.getUsername()==cookieName&&user.getSessionVal()==cookies[cookieName]));    
+    if(clientUser){
+        break;
+    }
+}
+if(!clientUser){
+    // Deny request because client is not logged in
+}
+*/
