@@ -29,13 +29,12 @@ export class User {
             return null;
         } 
 
-
         let uname_list = User.users.map(u => u.getUsername());
 
         if (uname_list.includes(data.username)) {
             return null;
         }
-        
+
         let user = new User(User.next_id++, data.username, data.password);
         User.users.push(user);
         return user;

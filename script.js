@@ -23,7 +23,8 @@ loginBtn.addEventListener('click', () => {
 });
 
 function loginUser(username = "admin", password = "admin") {
-    fetch('/login', {
+  let url = "http://localhost:3000";
+    fetch(url + '/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +55,9 @@ function loginUser(username = "admin", password = "admin") {
   
 
   function createNewUser(username, password) {
-  fetch('/newacct', {
+    let url = "http://localhost:3000";
+
+  fetch(url + '/newacct', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
