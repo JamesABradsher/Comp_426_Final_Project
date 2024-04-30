@@ -339,7 +339,7 @@ fetchNewsHeadlines();
 //----------------------------------------------------------------------------------------------------------------------------
 //Attestation
 
-// I, Kameron Thomas, Used ChatGBT[1] to aid in the creating this code, I also used the documentation and api from newsapi.org[2] to get the news headlines
+// I, Kameron Thomas, Used ChatGBT[1] to aid in the creation of this code, I also used the documentation and api from newsapi.org[2] to get the news headlines
 
 // [1] OpenAI. (2024). ChatGPT (3.5) [Large language model]. https://chat.openai.com
 // [2] News API. (2024). News API. https://newsapi.org
