@@ -9,6 +9,8 @@ const loginError = document.getElementById('login-error');
 const questionInput = document.getElementById('question-input');
 const askBtn = document.getElementById('ask-btn');
 const answerDisplay = document.getElementById('answer-display');
+const logoutBtn = document.getElementById('logout-btn');
+const url = "http://localhost:3000";
 
 let tasks = [];
 let loggedIn = false; // change to test login functionality
@@ -23,13 +25,12 @@ loginBtn.addEventListener('click', () => {
 });
 
 function loginUser(username = "admin", password = "admin") {
-  let url = "http://localhost:3000";
     fetch(url + '/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ "username": username, "password": password })
     })
     .then(response => response.json())
     .then(data => {
@@ -55,14 +56,12 @@ function loginUser(username = "admin", password = "admin") {
   
 
   function createNewUser(username, password) {
-    let url = "http://localhost:3000";
-
   fetch(url + '/newacct', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify({ "username": username, "password": password })
   })
   .then(response => response.json())
   .then(data => {
@@ -261,12 +260,12 @@ function sortAndRenderTasks() {
 }
 
 function saveTasks() {
-    fetch('/tasks', {
+    fetch(url + '/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ tasks })
+      body: JSON.stringify({ tasks }) // Not sure who the json is getting used for this so not sue if it needs a key
     })
     .then(response => {
       if (!response.ok) {
@@ -280,7 +279,7 @@ function saveTasks() {
   }
   
   function getTasks() {
-    fetch('/tasks', {
+    fetch(url + '/tasks', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -295,6 +294,23 @@ function saveTasks() {
       console.error('Error fetching tasks:', error);
     });
   }
+
+logoutBtn.addEventListener('click', () => {
+  fetch(url + '/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to logout');
+    }
+    loggedIn = false;
+    taskContainer.classList.add('hidden');
+    loginContainer.classList.remove('hidden');
+  })
+});
 
 //----------------------------------------------------------------------------------------------------------------------------
 const newsToggle = document.getElementById('news-toggle');

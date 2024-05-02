@@ -12,7 +12,6 @@ body {
 
 header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
@@ -36,6 +35,21 @@ header h1 {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+#logout-btn {
+    background-color: red;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 20px;
+  }
+  
+  #logout-btn:hover {
+    background-color: darkred;
+  }
 
 #username {
     padding: 10px;
@@ -195,6 +209,8 @@ header h1 {
     cursor: pointer;
     border-radius: 5px;
     transition: border-color 0.3s;
+    margin-right: 10px;
+    margin-left: 400px;
 }
 
 #news-toggle:hover {
@@ -233,7 +249,6 @@ header h1 {
 
 .completed-dropdown {
     position: relative;
-    margin-top: 10px;
 }
 
 #completed-toggle {
