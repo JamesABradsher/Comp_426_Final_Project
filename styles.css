@@ -36,6 +36,44 @@ header h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+#error-message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  #error-message.show {
+    opacity: 1;
+  }
+
+  #success-message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  #success-message.show {
+    opacity: 1;
+  }
+
 #logout-btn {
     background-color: red;
     color: white;

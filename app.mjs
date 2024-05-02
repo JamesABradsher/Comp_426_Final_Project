@@ -55,10 +55,25 @@ app.post('/logout',(req,res) =>{
 
 
 app.post('/newacct', (req, res) => {
+    console.log('Received /newacct request:', req.body);
+  
     let uname = req.body.username;
     let pas = req.body.password; // get uname and password from request
-    User.create({username: uname, password: pas});  
-});
+  
+    if (!uname || !pas) {
+      console.error('Invalid request body:', req.body);
+      return res.status(400).json({ success: false, error: 'Invalid request body' });
+    }
+  
+    try {
+      User.create({ username: uname, password: pas });
+      console.log('User created:', uname);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+  });
 
 
 //// Express App functions for getting and modifying a user's tasks ////

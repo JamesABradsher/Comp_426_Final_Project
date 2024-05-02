@@ -43,7 +43,15 @@ function loginUser(username = "admin", password = "admin") {
     },
     body: JSON.stringify({ username, password })
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      // If the response is not successful, return the error
+      return response.json().then(data => {
+        throw new Error(data.error);
+      });
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.success) {
       loggedIn = true;
@@ -52,45 +60,72 @@ function loginUser(username = "admin", password = "admin") {
       loginError.classList.add('hidden');
       getTasks();
     } else {
-      loginError.textContent = data.error || 'Login failed';
-      loginError.classList.remove('hidden');
+      displayErrorMessage(data.error || 'Login failed');
     }
   })
   .catch(error => {
     console.error('Login error:', error);
-    loginError.textContent = 'An error occurred during login. Please try again.';
-    loginError.classList.remove('hidden');
+    displayErrorMessage(error.message);
   });
+}
+
+function displayErrorMessage(message) {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = message;
+  errorMessageElement.classList.add('show');
+
+  // Hide the error message after 5 seconds
+  setTimeout(() => {
+    errorMessageElement.classList.remove('show');
+  }, 5000);
+}
+
+function displaySuccessMessage(message) {
+  const successMessageElement = document.getElementById('success-message');
+  successMessageElement.textContent = message;
+  successMessageElement.classList.add('show');
+
+  // Hide the success message after 5 seconds
+  setTimeout(() => {
+    successMessageElement.classList.remove('show');
+  }, 5000);
 }
   
 
-  function createNewUser(username, password) {
-    fetch(url + '/newacct', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "username": username, "password": password })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        loggedIn = true;
-        loginContainer.classList.add('hidden');
-        taskContainer.classList.remove('hidden');
-        loginError.classList.add('hidden');
-        getTasks();
-      } else {
-        loginError.classList.remove('hidden');
-        loginError.textContent = data.error || 'Failed to create user';
-      }
-    })
-    .catch(error => {
-      console.error('User creation error:', error);
+function createNewUser(username, password) {
+  console.log('Creating new user:', username, password);
+
+  fetch(url + '/newacct', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ "username": username, "password": password })
+  })
+  .then(response => {
+    console.log('Response status:', response.status);
+    return response.json();
+  })
+  .then(data => {
+    console.log('Server response:', data);
+    if (data.success) {
+      loggedIn = true;
+      loginContainer.classList.add('hidden');
+      taskContainer.classList.remove('hidden');
+      loginError.classList.add('hidden');
+      getTasks();
+      displaySuccessMessage('User created successfully!');
+    } else {
       loginError.classList.remove('hidden');
-      loginError.textContent = 'Failed to create user';
-    });
-  }
+      loginError.textContent = data.error || 'Failed to create user';
+    }
+  })
+  .catch(error => {
+    console.error('User creation error:', error);
+    loginError.classList.remove('hidden');
+    loginError.textContent = 'Failed to create user';
+  });
+}
 
 // Add task
 addTaskBtn.addEventListener('click', () => {
