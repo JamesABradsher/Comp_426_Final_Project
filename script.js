@@ -35,7 +35,7 @@ createUserBtn.addEventListener('click', () => {
   }
 });
 
-function loginUser(username = "admin", password = "admin") {
+function loginUser(username, password) {
   fetch(url + '/login', {
     method: 'POST',
     headers: {
@@ -114,7 +114,7 @@ function createNewUser(username, password) {
       taskContainer.classList.remove('hidden');
       loginError.classList.add('hidden');
       getTasks();
-      displaySuccessMessage('User created successfully!');
+      displaySuccessMessage('New Account Created!');
     } else {
       loginError.classList.remove('hidden');
       loginError.textContent = data.error || 'Failed to create user';
