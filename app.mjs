@@ -18,25 +18,23 @@ app.post('/login', (req, res) => {
     let uname = req.body.username;
     let pas = req.body.password; // get username and password from request
     let foundUser;
-    try{
-        foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
-    }catch(error){
+    try {
+        foundUser = User.getUserList().find((user) => user.getUsername() == uname && user.matchPassword(pas));
+    } catch (error) {
         foundUser = undefined;
     }
-    if (foundUser == undefined){
-        res.status(400).send("Bad login attempt");
+    if (foundUser == undefined) {
+        res.status(400).json({ success: false, error: 'Invalid username or password' });
         return;
-    }
-    else if(foundUser.getSessionVal()!=0){
-        res.status(400).send("Someone else is logged in");
+    } else if (foundUser.getSessionVal() != 0) {
+        res.status(400).json({ success: false, error: 'Someone else is logged in' });
         return;
-    }
-    else{ // if a user exists with that login info
-        let val = Math.random()+1;
-        res.cookie(uname,val); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
-        foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in. 
+    } else { // if a user exists with that login info
+        let val = Math.random() + 1;
+        res.cookie(uname, val); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
+        foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in.
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
-        res.json(true);
+        res.json({ success: true });
     }
 });
 

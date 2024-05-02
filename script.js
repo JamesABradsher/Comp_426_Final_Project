@@ -24,8 +24,48 @@ loginBtn.addEventListener('click', () => {
   }
 });
 
+const createUserBtn = document.getElementById('create-user-btn');
+
+createUserBtn.addEventListener('click', () => {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  if (username && password) {
+    createNewUser(username, password);
+  }
+});
+
 function loginUser(username = "admin", password = "admin") {
-    fetch(url + '/login', {
+  fetch(url + '/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      loggedIn = true;
+      loginContainer.classList.add('hidden');
+      taskContainer.classList.remove('hidden');
+      loginError.classList.add('hidden');
+      getTasks();
+    } else {
+      loginError.textContent = data.error || 'Login failed';
+      loginError.classList.remove('hidden');
+    }
+  })
+  .catch(error => {
+    console.error('Login error:', error);
+    loginError.textContent = 'An error occurred during login. Please try again.';
+    loginError.classList.remove('hidden');
+  });
+}
+  
+
+  function createNewUser(username, password) {
+    fetch(url + '/newacct', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -39,49 +79,18 @@ function loginUser(username = "admin", password = "admin") {
         loginContainer.classList.add('hidden');
         taskContainer.classList.remove('hidden');
         loginError.classList.add('hidden');
-        getTasks(); 
-      } else if (data.error === 'user_not_found') {
-        createNewUser(username, password);
+        getTasks();
       } else {
-        loginError.textContent = 'Login failed. Please check your username and password.';
         loginError.classList.remove('hidden');
+        loginError.textContent = data.error || 'Failed to create user';
       }
     })
     .catch(error => {
-      console.error('Login error:', error);
-      loginError.textContent = 'An error occurred during login. Please try again.';
+      console.error('User creation error:', error);
       loginError.classList.remove('hidden');
+      loginError.textContent = 'Failed to create user';
     });
   }
-  
-
-  function createNewUser(username, password) {
-  fetch(url + '/newacct', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ "username": username, "password": password })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      loggedIn = true;
-      loginContainer.classList.add('hidden');
-      taskContainer.classList.remove('hidden');
-      loginError.classList.add('hidden');
-      getTasks(); 
-    } else {
-      loginError.classList.remove('hidden');
-      loginError.textContent = data.error || 'Failed to create user';
-    }
-  })
-  .catch(error => {
-    console.error('User creation error:', error);
-    loginError.classList.remove('hidden');
-    loginError.textContent = 'Failed to create user';
-  });
-}
 
 // Add task
 addTaskBtn.addEventListener('click', () => {
