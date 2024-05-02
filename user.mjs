@@ -53,7 +53,7 @@ export class User {
 
     // Static method for returning array of all useres
     static getUserList() {
-        return User.users.map(u => u.json());
+        return User.users;
     }
 
     // Updates users username and password
