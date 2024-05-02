@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import {Task} from './task.mjs';
 import {User} from './user.mjs';
 
@@ -9,16 +10,18 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 app.use(cookieParser())
+app.use(cors());
 
 
 //// Express App functions for creating a new user and logging in an existing user ////
 app.post('/login', (req, res) => {
     let uname = req.body.username;
     let pas = req.body.password; // get username and password from request
+    let foundUser;
     try{
-        let foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
+        foundUser = User.getUserList().find((user) => user.getUsername()==uname&&user.matchPassword(pas));
     }catch(error){
-        let foundUser = undefined;
+        foundUser = undefined;
     }
     if (foundUser == undefined){
         res.status(400).send("Bad login attempt");
