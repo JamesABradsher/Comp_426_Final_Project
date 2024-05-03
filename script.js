@@ -12,8 +12,10 @@ const answerDisplay = document.getElementById('answer-display');
 const logoutBtn = document.getElementById('logout-btn');
 const url = "http://localhost:3000";
 
+
 let tasks = [];
 let loggedIn = false; // change to test login functionality
+let val = 0;
 
 loginBtn.addEventListener('click', () => {
   const username = document.getElementById('username').value;
@@ -24,38 +26,79 @@ loginBtn.addEventListener('click', () => {
   }
 });
 
-function loginUser(username = "admin", password = "admin") {
-    fetch(url + '/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "username": username, "password": password })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        loggedIn = true;
-        loginContainer.classList.add('hidden');
-        taskContainer.classList.remove('hidden');
-        loginError.classList.add('hidden');
-        getTasks(); 
-      } else if (data.error === 'user_not_found') {
-        createNewUser(username, password);
-      } else {
-        loginError.textContent = 'Login failed. Please check your username and password.';
-        loginError.classList.remove('hidden');
-      }
-    })
-    .catch(error => {
-      console.error('Login error:', error);
-      loginError.textContent = 'An error occurred during login. Please try again.';
-      loginError.classList.remove('hidden');
-    });
+const createUserBtn = document.getElementById('create-user-btn');
+
+createUserBtn.addEventListener('click', () => {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  if (username && password) {
+    createNewUser(username, password);
   }
+});
+
+function loginUser(username = "admin", password = "admin") {
+  fetch(url + '/login', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password})
+  })
+  .then(response => {
+    if (!response.ok) {
+      // If the response is not successful, return the error
+      return response.json().then(data => {
+        throw new Error(data.error);
+      });
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      loggedIn = true;
+      loginContainer.classList.add('hidden');
+      taskContainer.classList.remove('hidden');
+      loginError.classList.add('hidden');
+      val = data.val;
+      getTasks();
+      renderTasks();
+    } else {
+      displayErrorMessage(data.error || 'Login failed');
+    }
+  })
+  .catch(error => {
+    console.error('Login error:', error);
+    displayErrorMessage(error.message);
+  });
+}
+
+function displayErrorMessage(message) {
+  const errorMessageElement = document.getElementById('error-message');
+  errorMessageElement.textContent = message;
+  errorMessageElement.classList.add('show');
+
+  // Hide the error message after 5 seconds
+  setTimeout(() => {
+    errorMessageElement.classList.remove('show');
+  }, 5000);
+}
+
+function displaySuccessMessage(message) {
+  const successMessageElement = document.getElementById('success-message');
+  successMessageElement.textContent = message;
+  successMessageElement.classList.add('show');
+
+  // Hide the success message after 5 seconds
+  setTimeout(() => {
+    successMessageElement.classList.remove('show');
+  }, 5000);
+}
   
 
-  function createNewUser(username, password) {
+function createNewUser(username, password) {
+  console.log('Creating new user:', username, password);
+
   fetch(url + '/newacct', {
     method: 'POST',
     headers: {
@@ -63,14 +106,19 @@ function loginUser(username = "admin", password = "admin") {
     },
     body: JSON.stringify({ "username": username, "password": password })
   })
-  .then(response => response.json())
+  .then(response => {
+    console.log('Response status:', response.status);
+    return response.json();
+  })
   .then(data => {
+    console.log('Server response:', data);
     if (data.success) {
       loggedIn = true;
+      loginUser(username,password);
       loginContainer.classList.add('hidden');
       taskContainer.classList.remove('hidden');
       loginError.classList.add('hidden');
-      getTasks(); 
+      displaySuccessMessage('User created successfully!');
     } else {
       loginError.classList.remove('hidden');
       loginError.textContent = data.error || 'Failed to create user';
@@ -83,13 +131,12 @@ function loginUser(username = "admin", password = "admin") {
   });
 }
 
-// Add task
 addTaskBtn.addEventListener('click', () => {
   const taskText = taskInput.value.trim();
   const dueDate = dueDateInput.value;
   if (taskText) {
     const newTask = { text: taskText, dueDate, completed: false, starred: false };
-    tasks.push(newTask);
+    tasks = [...tasks, newTask]; // Ensure tasks is initialized before accessing it
     renderAndSortTasks();
     taskInput.value = '';
     dueDateInput.value = '';
@@ -235,20 +282,22 @@ function sortAndRenderTasks() {
   const completedList = document.getElementById('completed-list');
   completedList.innerHTML = '';
 
-  tasks.sort((a, b) => {
-    if (!a.dueDate && !a.starred) return 1;
-    if (!b.dueDate && !b.starred) return -1;
+  if (tasks) {
+    tasks.sort((a, b) => {
+      if (!a.dueDate && !a.starred) return 1;
+      if (!b.dueDate && !b.starred) return -1;
 
-    if (a.starred && !b.starred) return -1;
-    if (!a.starred && b.starred) return 1;
+      if (a.starred && !b.starred) return -1;
+      if (!a.starred && b.starred) return 1;
 
-    if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
+      if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
 
-    if (a.dueDate) return -1;
-    if (b.dueDate) return 1;
+      if (a.dueDate) return -1;
+      if (b.dueDate) return 1;
 
-    return 0;
-  });
+      return 0;
+    });
+  }
 
   tasks.forEach(task => {
     if (task.completed) {
@@ -265,7 +314,7 @@ function saveTasks() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ tasks }) // Not sure who the json is getting used for this so not sue if it needs a key
+      body: JSON.stringify({ tasks, val }) // Not sure who the json is getting used for this so not sue if it needs a key
     })
     .then(response => {
       if (!response.ok) {
@@ -279,7 +328,7 @@ function saveTasks() {
   }
   
   function getTasks() {
-    fetch(url + '/tasks', {
+    fetch(url + '/tasks/' + val, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -287,7 +336,8 @@ function saveTasks() {
     })
     .then(response => response.json())
     .then(data => {
-      tasks = data.tasks;
+      tasks = data.tasks ? data.tasks : [];
+      console.log(data.tasks);
       renderAndSortTasks();
     })
     .catch(error => {
@@ -300,7 +350,8 @@ logoutBtn.addEventListener('click', () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    body: JSON.stringify({ val })
   })
   .then(response => {
     if (!response.ok) {
