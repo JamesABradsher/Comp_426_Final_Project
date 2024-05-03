@@ -70,7 +70,7 @@ app.post('/newacct', (req, res) => {
 
 
 //// Express App functions for getting and modifying a user's tasks ////
-app.get('/tasks', (req, res) => {
+app.get('/tasks/:val', (req, res) => {
     /* Get all tasks of a user. Gets a JSON object containing a list of Task objects. 
     The username currently logged in is passed into req.cookie. Search for that user in the User class,  */
 
@@ -82,7 +82,7 @@ app.get('/tasks', (req, res) => {
     // If the username exists, and the session val is valid, then proceed:
     let foundUser;
     try {
-        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.val);
+        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.params.val);
     } catch (error) {
         foundUser = undefined;
     }
