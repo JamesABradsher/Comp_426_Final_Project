@@ -39,7 +39,7 @@ createUserBtn.addEventListener('click', () => {
 
 function loginUser(username = "admin", password = "admin") {
   fetch(url + '/login', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
