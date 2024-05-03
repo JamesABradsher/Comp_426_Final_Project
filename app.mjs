@@ -10,7 +10,10 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 app.use(cookieParser())
-app.use(cors());
+app.use(cors({
+    origin: 'http://127.0.0.1:5500', // Specify the allowed origin
+    credentials: true // Allow credentials to be sent with requests
+  }));
 
 
 //// Express App functions for creating a new user and logging in an existing user ////
@@ -31,7 +34,10 @@ app.post('/login', (req, res) => {
         return;
     } else { // if a user exists with that login info
         let val = Math.random() + 1;
-        res.cookie(uname, val); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
+        res.cookie(uname, val,{
+            domain: 'localhost',
+            path: '/'
+        }); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
         foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in.
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
         res.json({ success: true });
@@ -89,8 +95,9 @@ app.get('/tasks', (req, res) => {
     // If the username exists, and the session val is valid, then proceed:
 
     const cookies = req.cookies;
+    
     if(req.cookies === undefined){
-        res.status(400).send("POST Failed - req.cookies is undefined");
+        res.status(399).json({ success: false, error: "POST Failed - req.cookies is undefined"});
         return;
     }
 
@@ -105,7 +112,7 @@ app.get('/tasks', (req, res) => {
     
     if(!clientUser){
         // Deny request because client is not logged in or user does not exist
-        res.status(400).send("POST Failed - User does not exist or user is not logged in");
+        res.status(398).json({ success: false, error: "POST Failed - User does not exist or user is not logged in"});
         return;
     }
 
@@ -143,7 +150,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     // If the username exists, and the session val is valid, then proceed:
     const cookies = req.cookies;
     if(req.cookies === undefined){
-        res.status(400).send("POST Failed - req.cookies is undefined");
+        res.status(401).json({ success: false, error: "POST Failed - req.cookies is undefined"});
         return;
     }
 
@@ -158,7 +165,8 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     
     if(!clientUser){
         // Deny request because client is not logged in or user does not exist
-        res.status(400).send("POST Failed - User does not exist or user is not logged in");
+        
+        res.status(402).json({ success: false, error: "POST Failed - User does not exist or user is not logged in"});
         return;
     }
 
@@ -166,7 +174,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     // Get the request body containing a list of JSON objects
     let tasksList = req.body;
     if(!tasksList){
-        res.status(400).send("POST Failed - Tasks list is undefined");
+        res.status(403).json({ success: false, error: "POST Failed - Tasks list is undefined"});
         return;
     }
 
@@ -181,22 +189,22 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
         // Check each argument as being valid 
         if(taskTitle === undefined || typeof taskTitle != 'string' || taskTitle.length <= 0){
             // If any conditions fail, return an error code
-            res.status(400).send("POST Failed - taskTitle is invalid (undefined, not a string, or empty string)");
+            res.status(404).json({ success: false, error: "POST Failed - taskTitle is invalid (undefined, not a string, or empty string)"});
             return;
         }
 
         if(taskDue === undefined || typeof taskDue != 'string'){
-            res.status(400).send("POST Failed - taskDue is invalid (undefined or not a string)");
+            res.status(405).json({ success: false, error: "POST Failed - taskDue is invalid (undefined or not a string)"});
             return;
         }
 
         if(taskIsComplete === undefined || typeof taskIsComplete != 'boolean'){
-            res.status(400).send("POST Failed - taskIsComplete is invalid (undefined or not a boolean)");
+            res.status(406).json({ success: false, error: "POST Failed - taskIsComplete is invalid (undefined or not a boolean)"});
             return;
         }
 
         if(taskIsStarred === undefined || typeof taskIsStarred != 'boolean'){
-            res.status(400).send("POST Failed - taskIsStarred is invalid (undefined or not a boolean)");
+            res.status(407).json({ success: false, error: "POST Failed - taskIsStarred is invalid (undefined or not a boolean)"});
             return;
         }
 
@@ -204,7 +212,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
         let newTask = Task.createTask(taskTitle, taskDue, taskIsComplete, taskIsStarred);
 
         if(!newTask){
-            res.status(400).send("POST Failed - Task construction failed");
+            res.status(408).json({ success: false, error: "POST Failed - Task construction failed"});
             return;
         } else {
             taskObjects.push(newTask)

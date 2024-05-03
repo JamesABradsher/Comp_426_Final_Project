@@ -41,9 +41,11 @@ function loginUser(username, password) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify({ username, password }),
+    credentials: 'include'
   })
-  .then(response => {
+  .then((response) => {
+    
     if (!response.ok) {
       // If the response is not successful, return the error
       return response.json().then(data => {
@@ -100,7 +102,8 @@ function createNewUser(username, password) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ "username": username, "password": password })
+    body: JSON.stringify({ "username": username, "password": password }),
+    credentials: 'include'
   })
   .then(response => {
     console.log('Response status:', response.status);
@@ -109,6 +112,7 @@ function createNewUser(username, password) {
   .then(data => {
     console.log('Server response:', data);
     if (data.success) {
+      loginUser(username,password);
       loggedIn = true;
       loginContainer.classList.add('hidden');
       taskContainer.classList.remove('hidden');
@@ -278,7 +282,7 @@ function sortAndRenderTasks() {
   taskList.innerHTML = '';
   const completedList = document.getElementById('completed-list');
   completedList.innerHTML = '';
-
+  if(tasks){
   tasks.sort((a, b) => {
     if (!a.dueDate && !a.starred) return 1;
     if (!b.dueDate && !b.starred) return -1;
@@ -302,6 +306,7 @@ function sortAndRenderTasks() {
     }
   });
 }
+}
 
 function saveTasks() {
     fetch(url + '/tasks', {
@@ -309,7 +314,8 @@ function saveTasks() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ tasks }) // Not sure who the json is getting used for this so not sue if it needs a key
+      body: JSON.stringify({ tasks }), // Not sure who the json is getting used for this so not sue if it needs a key
+      credentials: 'include'
     })
     .then(response => {
       if (!response.ok) {
@@ -327,7 +333,8 @@ function saveTasks() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      credentials: 'include'
     })
     .then(response => response.json())
     .then(data => {
@@ -344,7 +351,8 @@ logoutBtn.addEventListener('click', () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    credentials: 'include'
   })
   .then(response => {
     if (!response.ok) {
