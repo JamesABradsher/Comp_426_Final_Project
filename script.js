@@ -328,12 +328,11 @@ function saveTasks() {
   }
   
   function getTasks() {
-    fetch(url + '/tasks', {
+    fetch(url + '/tasks/' + val, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: {'val': val}
+      }
     })
     .then(response => response.json())
     .then(data => {
