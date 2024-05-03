@@ -32,13 +32,13 @@ app.put('/login', (req, res) => {
         let val = Math.random() + 1;
         foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in.
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
-        res.json({ success: true, sessionVal: val });
+        res.json({ success: true, 'val': val });
     }
 });
 
 
 app.post('/logout',(req,res) =>{
-    const val = req.body.sessionVal;
+    const val = req.body.val;
     let foundUser = User.getUserList().find((user)=>user.getSessionVal()==val);
     if(foundUser){
         foundUser.setSessionVal(0);
@@ -82,7 +82,7 @@ app.get('/tasks', (req, res) => {
     // If the username exists, and the session val is valid, then proceed:
     let foundUser;
     try {
-        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.sessionVal);
+        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.val);
     } catch (error) {
         foundUser = undefined;
     }
@@ -92,7 +92,7 @@ app.get('/tasks', (req, res) => {
     }
     
     /// STEP 2 - Get the User's list of tasks
-    let taskList = clientUser.getTaskList(); 
+    let taskList = foundUser.getTaskList(); 
     res.status(201).json(taskList);
 });
 
@@ -125,7 +125,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     // If the username exists, and the session val is valid, then proceed:
     let foundUser;
     try {
-        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.sessionVal);
+        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.val);
     } catch (error) {
         foundUser = undefined;
     }
@@ -146,10 +146,10 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     let taskObjects = []; // will hold the instances of all newly created Task objects
     for(let i = 0; i < tasksList.length; i++){
         // Get the current task's JSON object. Create a new task instance using this information called newTask
-        let taskTitle = tasksList[i].taskTitle; // string, nonempty
-        let taskDue = tasksList[i].taskDue; // string, can be empty or in format YYYY-MM-DD 
-        let taskIsComplete = tasksList[i].taskIsComplete; // boolean
-        let taskIsStarred = tasksList[i].taskIsStarred; // boolean
+        let taskTitle = tasksList[i].text; // string, nonempty
+        let taskDue = tasksList[i].dueDate; // string, can be empty or in format YYYY-MM-DD 
+        let taskIsComplete = tasksList[i].completed; // boolean
+        let taskIsStarred = tasksList[i].starred; // boolean
 
         // Check each argument as being valid 
         if(taskTitle === undefined || typeof taskTitle != 'string' || taskTitle.length <= 0){
@@ -185,7 +185,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     }
 
     /// STEP 3: ADD ALL TASKS TO THE USER
-    clientUser.setTaskList(taskObjects);
+    foundUser.setTaskList(taskObjects);
 
     res.status(201).send("POST Successful");
 })
