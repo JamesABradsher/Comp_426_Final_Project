@@ -59,7 +59,11 @@ app.post('/newacct', (req, res) => {
     }
   
     try {
-      User.create({ username: uname, password: pas });
+      let newUser = User.create({ username: uname, password: pas });
+      if(!newUser){ // check if user is null
+        console.log("New user already exists, we need to let the front end know.")
+        res.status(400).json({ success: false, error: 'Username already exists' });
+      }
       console.log('User created:', uname);
       res.json({ success: true });
     } catch (error) {
