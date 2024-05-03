@@ -32,6 +32,7 @@ export class User {
         let uname_list = User.users.map(u => u.getUsername());
 
         if (uname_list.includes(data.username)) {
+            console.log("CONSOLE - USER ALREADY EXISTS")
             return null;
         }
 

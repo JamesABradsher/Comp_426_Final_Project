@@ -122,6 +122,7 @@ function createNewUser(username, password) {
     } else {
       loginError.classList.remove('hidden');
       loginError.textContent = data.error || 'Failed to create user';
+      displayErrorMessage(loginError.textContent);
     }
   })
   .catch(error => {
