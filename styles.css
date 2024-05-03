@@ -118,6 +118,21 @@ header h1 {
     color:#e4730f;
 }
 
+#create-user-btn {
+    padding: 10px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  
+  #create-user-btn:hover {
+    background-color: #666;
+    color:#e4730f;
+  }
+
 
 #task-input {
     flex-grow: 1;
