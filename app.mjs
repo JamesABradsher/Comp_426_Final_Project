@@ -32,7 +32,7 @@ app.put('/login', (req, res) => {
         let val = Math.random() + 1;
         foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in.
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
-        res.json({ success: true, 'val': val });
+        res.json({ success: true, val: val });
     }
 });
 
@@ -61,7 +61,6 @@ app.post('/newacct', (req, res) => {
     try {
       let newUser = User.create({ username: uname, password: pas });
       if(!newUser){ // check if user is null
-        console.log("New user already exists, we need to let the front end know.")
         res.status(400).json({ success: false, error: 'Username already exists' });
       }
       console.log('User created:', uname);

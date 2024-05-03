@@ -117,7 +117,6 @@ function createNewUser(username, password) {
       loginContainer.classList.add('hidden');
       taskContainer.classList.remove('hidden');
       loginError.classList.add('hidden');
-      getTasks();
       displaySuccessMessage('User created successfully!');
     } else {
       loginError.classList.remove('hidden');
