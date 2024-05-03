@@ -43,8 +43,7 @@ function loginUser(username = "admin", password = "admin") {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ username, password}),
-    credentials: 'include'
+    body: JSON.stringify({ username, password})
   })
   .then(response => {
     if (!response.ok) {
@@ -104,8 +103,7 @@ function createNewUser(username, password) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ "username": username, "password": password }),
-    credentials: 'include'
+    body: JSON.stringify({ "username": username, "password": password })
   })
   .then(response => {
     console.log('Response status:', response.status);
@@ -316,8 +314,7 @@ function saveTasks() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ tasks, val }), // Not sure who the json is getting used for this so not sue if it needs a key
-      credentials: 'include'
+      body: JSON.stringify({ tasks, val }) // Not sure who the json is getting used for this so not sue if it needs a key
     })
     .then(response => {
       if (!response.ok) {
@@ -335,8 +332,7 @@ function saveTasks() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      credentials: 'include'
+      }
     })
     .then(response => response.json())
     .then(data => {
@@ -354,8 +350,7 @@ logoutBtn.addEventListener('click', () => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ val }),
-    credentials: 'include'
+    body: JSON.stringify({ val })
   })
   .then(response => {
     if (!response.ok) {

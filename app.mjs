@@ -9,15 +9,11 @@ import {User} from './user.mjs';
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
-app.use(cookieParser())
-app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Specify the allowed origin
-    credentials: true // Allow credentials to be sent with requests
-  }));
+app.use(cors());
 
 
 //// Express App functions for creating a new user and logging in an existing user ////
-app.post('/login', (req, res) => {
+app.put('/login', (req, res) => {
     let uname = req.body.username;
     let pas = req.body.password; // get username and password from request
     let foundUser;
@@ -34,29 +30,20 @@ app.post('/login', (req, res) => {
         return;
     } else { // if a user exists with that login info
         let val = Math.random() + 1;
-        res.cookie(uname, val,{
-            domain: 'localhost',
-            path: '/'
-        }); // plant a cookie (maybe I should make the cookie value something other than a random number; revisit this later)
         foundUser.setSessionVal(val); // I'm assuming the user has a "session value" that is set whenever a client logs in.
         // This value is known only to the user that logged in most recently and should be nonzero only when someone is logged in.
-        res.json({ success: true });
+        res.json({ success: true, sessionVal: val });
     }
 });
 
 
 app.post('/logout',(req,res) =>{
-    const cookies = req.cookies;
-    for(const cookieName in cookies){
-        let uname = cookieName;
-        let val = cookies[cookieName];
-        let foundUser = User.getUserList().find((user) => user.getUsername()==uname && user.getSessionVal()==val);
-        if(foundUser){
-            foundUser.setSessionVal(0);
-        }
+    const val = req.body.sessionVal;
+    let foundUser = User.getUserList().find((user)=>user.getSessionVal()==val);
+    if(foundUser){
+        foundUser.setSessionVal(0);
     }
     res.json(true);
-    
 });
 
 
@@ -93,29 +80,17 @@ app.get('/tasks', (req, res) => {
     // let currUser = User.getUserByUsername(username) // to get the current user object
     // If the user exists, make sure that the user is logged in (session val != 0) and that the session val in the cookie matches the User instance's session val
     // If the username exists, and the session val is valid, then proceed:
-
-    const cookies = req.cookies;
-    
-    if(req.cookies === undefined){
-        res.status(399).json({ success: false, error: "POST Failed - req.cookies is undefined"});
+    let foundUser;
+    try {
+        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.sessionVal);
+    } catch (error) {
+        foundUser = undefined;
+    }
+    if (!foundUser) {
+        res.status(400).json({ success: false, error: 'Client not logged in' });
         return;
     }
-
-    let clientUser; // will hold the queried User object
-    for (const cookieName in cookies){ // check each cookie to see if information matches a user
-        // Check if the username matches an existing username and that that userame's User object's sessionVal is valid 
-        clientUser = User.getUserList().find((user) => (user.getUsername()==cookieName&&user.getSessionVal()==cookies[cookieName]));    
-        if(clientUser){
-            break;
-        }
-    }
     
-    if(!clientUser){
-        // Deny request because client is not logged in or user does not exist
-        res.status(398).json({ success: false, error: "POST Failed - User does not exist or user is not logged in"});
-        return;
-    }
-
     /// STEP 2 - Get the User's list of tasks
     let taskList = clientUser.getTaskList(); 
     res.status(201).json(taskList);
@@ -148,33 +123,23 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     // let currUser = User.getUserByUsername(username) // to get the current user object
     // If the user exists, make sure that the user is logged in (session val != 0) and that the session val in the cookie matches the User instance's session val
     // If the username exists, and the session val is valid, then proceed:
-    const cookies = req.cookies;
-    if(req.cookies === undefined){
-        res.status(401).send({ success: false, error: "POST Failed - req.cookies is undefined"});
-        return;
+    let foundUser;
+    try {
+        foundUser = User.getUserList().find((user) => user.getSessionVal()==req.body.sessionVal);
+    } catch (error) {
+        foundUser = undefined;
     }
-
-    let clientUser; // will hold the queried User object
-    for (const cookieName in cookies){ // check each cookie to see if information matches a user
-        // Check if the username matches an existing username and that that userame's User object's sessionVal is valid 
-        clientUser = User.getUserList().find((user) => (user.getUsername()==cookieName&&user.getSessionVal()==cookies[cookieName]));    
-        if(clientUser){
-            break;
-        }
+    if (!foundUser) {
+        res.status(400).json({ success: false, error: 'Client not logged in' });
+        return;
     }
     
-    if(!clientUser){
-        // Deny request because client is not logged in or user does not exist
-        
-        res.status(402).send({ success: false, error: "POST Failed - User does not exist or user is not logged in"});
-        return;
-    }
-
+    
     /// STEP 2: CREATE A NEW TASK FOR EACH TASK IN THE LIST
     // Get the request body containing a list of JSON objects
-    let tasksList = req.body;
+    let tasksList = req.body.tasks;
     if(!tasksList){
-        res.status(403).send({ success: false, error: "POST Failed - Tasks list is undefined"});
+        res.status(400).json({ success: false, error: "POST Failed - Tasks list is undefined"});
         return;
     }
 
@@ -189,22 +154,22 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
         // Check each argument as being valid 
         if(taskTitle === undefined || typeof taskTitle != 'string' || taskTitle.length <= 0){
             // If any conditions fail, return an error code
-            res.status(404).send({ success: false, error: "POST Failed - taskTitle is invalid (undefined, not a string, or empty string)"});
+            res.status(400).json({ success: false, error: "POST Failed - taskTitle is invalid (undefined, not a string, or empty string)"});
             return;
         }
 
         if(taskDue === undefined || typeof taskDue != 'string'){
-            res.status(405).send({ success: false, error: "POST Failed - taskDue is invalid (undefined or not a string)"});
+            res.status(400).json({ success: false, error: "POST Failed - taskDue is invalid (undefined or not a string)"});
             return;
         }
 
         if(taskIsComplete === undefined || typeof taskIsComplete != 'boolean'){
-            res.status(406).send({ success: false, error: "POST Failed - taskIsComplete is invalid (undefined or not a boolean)"});
+            res.status(400).json({ success: false, error: "POST Failed - taskIsComplete is invalid (undefined or not a boolean)"});
             return;
         }
 
         if(taskIsStarred === undefined || typeof taskIsStarred != 'boolean'){
-            res.status(407).send({ success: false, error: "POST Failed - taskIsStarred is invalid (undefined or not a boolean)"});
+            res.status(400).json({ success: false, error: "POST Failed - taskIsStarred is invalid (undefined or not a boolean)"});
             return;
         }
 
@@ -212,7 +177,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
         let newTask = Task.createTask(taskTitle, taskDue, taskIsComplete, taskIsStarred);
 
         if(!newTask){
-            res.status(408).send({ success: false, error: "POST Failed - Task construction failed"});
+            res.status(400).json({ success: false, error: "POST Failed - Task construction failed"});
             return;
         } else {
             taskObjects.push(newTask)
@@ -222,7 +187,7 @@ app.post('/tasks', (req, res) => { // Our front end just uses POST to handle POS
     /// STEP 3: ADD ALL TASKS TO THE USER
     clientUser.setTaskList(taskObjects);
 
-    res.status(201).json("POST Successful");
+    res.status(201).send("POST Successful");
 })
 
 
