@@ -16,6 +16,7 @@ const url = "http://localhost:3000";
 let tasks = [];
 let loggedIn = false; // change to test login functionality
 let val = 0;
+let lastStarredIndex = 0; // keeps track of where the starred tasks end
 
 loginBtn.addEventListener('click', () => {
   const username = document.getElementById('username').value;
@@ -190,6 +191,8 @@ function addTaskToList(task) {
   starBtn.classList.add('star-btn');
   starBtn.classList.add('clicked');
   starBtn.addEventListener('click', () => {
+    if(task.starred){lastStarredIndex--;}
+    else{lastStarredIndex++;}
     task.starred = !task.starred;
     starBtn.textContent = task.starred ? '★' : '☆';
     starBtn.classList.toggle('clicked');
@@ -237,7 +240,7 @@ function addTaskToList(task) {
   } else {
     // Check if the task is starred, if so, add it to the top of the list
     const index = tasks.findIndex(t => t === task);
-    if (task.starred && index > 0) {
+    if (task.starred && index > lastStarredIndex) {// this was previously 0 instead of LSI, and it caused the stack overflow error
       tasks.splice(index, 1);
       tasks.unshift(task);
       renderTasks();
