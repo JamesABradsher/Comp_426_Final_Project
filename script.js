@@ -164,6 +164,7 @@ const completedList = document.getElementById('completed-list');
 
 function addTaskToList(task) {
   const taskItem = document.createElement('li');
+  console.log("calling add task to list");
 
   // Completed checkbox
   const completedCheckbox = document.createElement('input');
@@ -174,6 +175,7 @@ function addTaskToList(task) {
     if (task.completed) {
       addTaskToCompletedList(task);
       console.log('Task completed:', task.text);
+      console.log("calling completed checkbox");
       renderTasks();
     } else {
       removeTaskFromCompletedList(task);
@@ -231,7 +233,7 @@ function addTaskToList(task) {
   taskItem.appendChild(deleteBtn);
 
   if (task.completed) {
-    addTaskToCompletedList(task);
+    //addTaskToCompletedList(task);
   } else {
     // Check if the task is starred, if so, add it to the top of the list
     const index = tasks.findIndex(t => t === task);
@@ -249,7 +251,15 @@ function addTaskToCompletedList(task) {
   const completedList = document.getElementById('completed-list');
   const completedItem = document.createElement('li');
   completedItem.textContent = task.text;
+  completedItem.addEventListener('click', () => {
+    task.completed = false;
+    removeTaskFromCompletedList(task);
+    renderTasks();
+  });
+
   completedList.appendChild(completedItem);
+  console.log('calling completed function');
+  console.log('completed list:', completedList);
 }
 
 function removeTaskFromCompletedList(task) {

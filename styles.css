@@ -251,8 +251,10 @@ header h1 {
 
 
 .news-dropdown {
-    position: relative;
+    position: absolute;
+    right: 30px;
 }
+
 
 #news-toggle {
     background-color: #555;
@@ -262,8 +264,6 @@ header h1 {
     cursor: pointer;
     border-radius: 5px;
     transition: border-color 0.3s;
-    margin-right: 10px;
-    margin-left: 400px;
 }
 
 #news-toggle:hover {
@@ -308,6 +308,7 @@ header h1 {
     overflow-y: auto;
     width: 300px; 
     border-radius: 5px;
+    right: 30px;
 }
 
 #completed-list {
@@ -324,6 +325,7 @@ header h1 {
 
 #completed-list li:hover {
     background-color: #555;
+    color:#e4730f;
 }
 
 /* 
