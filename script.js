@@ -309,6 +309,7 @@ function sortAndRenderTasks() {
       addTaskToList(task);
     }
   });
+  renderTasks();
 }
 
 function saveTasks() {
@@ -339,8 +340,10 @@ function saveTasks() {
     })
     .then(response => response.json())
     .then(data => {
-      tasks = data.tasks || [];
+      tasks = data || [];
       renderAndSortTasks();
+      console.log('Tasks fetched successfully:', data);
+      renderTasks();
     })
     .catch(error => {
       console.error('Error fetching tasks:', error);
