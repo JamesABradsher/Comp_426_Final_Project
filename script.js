@@ -325,6 +325,7 @@ function saveTasks() {
         throw new Error('Network response was not ok');
       }
       console.log('Tasks saved successfully');
+      console.log('Tasks saved:', data);
     })
     .catch(error => {
       console.error('Error saving tasks:', error);
@@ -340,10 +341,9 @@ function saveTasks() {
     })
     .then(response => response.json())
     .then(data => {
-      tasks = data || [];
       renderAndSortTasks();
       console.log('Tasks fetched successfully:', data);
-      renderTasks();
+      console.log('Tasks:', tasks);
     })
     .catch(error => {
       console.error('Error fetching tasks:', error);
