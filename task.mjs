@@ -64,10 +64,10 @@ export class Task {
     json(){
         return{
            "id" : this.#id,
-           "taskTitle" : this.#taskTitle,
-           "taskDue" : this.#taskDue,
-           "taskIsComplete" : this.#taskIsComplete,
-           "taskIsStarred" : this.#taskIsStarred
+           "text" : this.#taskTitle,
+           "dueDate" : this.#taskDue,
+           "completed" : this.#taskIsComplete,
+           "starred" : this.#taskIsStarred
         }
     }
 }
