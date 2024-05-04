@@ -61,6 +61,7 @@ function loginUser(username = "admin", password = "admin") {
       loginContainer.classList.add('hidden');
       taskContainer.classList.remove('hidden');
       loginError.classList.add('hidden');
+      completedContainer.classList.remove('hidden');
       val = data.val;
       getTasks();
     } else {
@@ -158,14 +159,8 @@ taskInput.addEventListener('keydown', (event) => {
   }
 });
 
-  const completedToggle = document.getElementById('completed-toggle');
-  const completedContainer = document.getElementById('completed-container');
-  const completedList = document.getElementById('completed-list');
-
-  completedToggle.addEventListener('click', () => {
-    console.log('Toggle button clicked');
-    completedContainer.classList.toggle('hidden');
-  });
+const completedContainer = document.getElementById('completed-container');
+const completedList = document.getElementById('completed-list');
 
 function addTaskToList(task) {
   const taskItem = document.createElement('li');
@@ -178,11 +173,11 @@ function addTaskToList(task) {
     task.completed = completedCheckbox.checked;
     if (task.completed) {
       addTaskToCompletedList(task);
+      console.log('Task completed:', task.text);
+      renderTasks();
     } else {
       removeTaskFromCompletedList(task);
     }
-    saveTasks();
-    renderTasks();
   });
 
   // Star button
@@ -369,6 +364,7 @@ logoutBtn.addEventListener('click', () => {
     loggedIn = false;
     taskContainer.classList.add('hidden');
     loginContainer.classList.remove('hidden');
+    completedContainer.classList.add('hidden');
   })
 });
 
