@@ -329,6 +329,7 @@ function saveTasks() {
     })
     .catch(error => {
       console.error('Error saving tasks:', error);
+      console.log('Tasks saved:', tasks);
     });
   }
   
@@ -346,7 +347,7 @@ function saveTasks() {
         tasks = [];
         tasks = data;
       }
-     renderAndSortTasks();
+      renderAndSortTasks();
     })
     .catch(error => {
       console.error('Error fetching tasks:', error);
