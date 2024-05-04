@@ -125,6 +125,7 @@ export class User {
     }
 
     getTaskList() {
+        console.log("this is returned ", this.#task_list);
         return this.#task_list.map(t => t.json()); // Assumes the task have some json function
     }
 
