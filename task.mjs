@@ -3,10 +3,10 @@ import { networkInterfaces } from "os";
 export class Task {
     // Private fields of Task instances
     #id; // int
-    #text; // string
-    #dueDate; // string (optional)
-    #completed; // boolean (optional)
-    #starred; // boolean (optional) 
+    #taskTitle; // string
+    #taskDue; // string (optional)
+    #taskIsComplete; // boolean (optional)
+    #taskIsStarred; // boolean (optional) 
 
     // Private static fields of Task class
     static #maxID = 0; 
@@ -15,10 +15,10 @@ export class Task {
     constructor (id, taskTitle, taskDue, taskIsComplete, taskIsStarred) {
         // Will be called by createNode, which will set id and verify parameters. After construction, createNode adds the newly constructed node to #nodes.
         this.#id = id;
-        this.#text = taskTitle;
-        this.#dueDate = taskDue;
-        this.#completed = taskIsComplete;
-        this.#starred = taskIsStarred;
+        this.#taskTitle = taskTitle;
+        this.#taskDue = taskDue;
+        this.#taskIsComplete = taskIsComplete;
+        this.#taskIsStarred = taskIsStarred;
     }
 
     static createTask(taskTitle, taskDue, taskIsComplete, taskIsStarred){
@@ -50,11 +50,11 @@ export class Task {
     }
 
     getTaskTitle(){
-        return this.#text;
+        return this.#taskTitle;
     }
 
     getTaskDue(){
-        return this.#dueDate;
+        return this.#taskDue;
     }
 
     getTaskIsComplete(){
@@ -64,10 +64,10 @@ export class Task {
     json(){
         return{
            "id" : this.#id,
-           "taskTitle" : this.#text,
-           "taskDue" : this.#dueDate,
-           "taskIsComplete" : this.#completed,
-           "taskIsStarred" : this.#starred
+           "text" : this.#taskTitle,
+           "dueDate" : this.#taskDue,
+           "completed" : this.#taskIsComplete,
+           "starred" : this.#taskIsStarred
         }
     }
 }
