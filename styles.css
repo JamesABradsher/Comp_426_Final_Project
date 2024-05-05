@@ -194,10 +194,13 @@ header h1 {
     color: #f5f5f5;
     border: none;
     border-radius: 5px;
+    word-wrap: break-word;
 }
 
 #task-list li span {
     flex-grow: 1;
+    word-wrap: break-word;
+    max-width: 600px;
 }
 
 #task-list li .due-date {
@@ -300,15 +303,22 @@ header h1 {
     color:#e4730f;
 }
 
+#completed-container h2 {
+    color: #e4730f;
+    margin-bottom: 0px;
+    text-align: center;
+    border-bottom: 1px solid #666;
+}
+
 #completed-container {
     position: absolute;
     background-color: #444;
     z-index: 1;
     max-height: 300px;
-    overflow-y: auto;
+    word-wrap: break-word;
     width: 300px; 
     border-radius: 5px;
-    right: 30px;
+    right: 235px;
 }
 
 #completed-list {
