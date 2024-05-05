@@ -362,6 +362,7 @@ function saveTasks() {
   }
 
 logoutBtn.addEventListener('click', () => {
+  taskList.innerHTML = '';
   fetch(url + '/logout', {
     method: 'POST',
     headers: {
