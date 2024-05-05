@@ -251,10 +251,12 @@ function addTaskToCompletedList(task) {
   const completedList = document.getElementById('completed-list');
   const completedItem = document.createElement('li');
   completedItem.textContent = task.text;
+  saveTasks();
   completedItem.addEventListener('click', () => {
     task.completed = false;
     removeTaskFromCompletedList(task);
     renderTasks();
+    saveTasks();
   });
 
   completedList.appendChild(completedItem);
