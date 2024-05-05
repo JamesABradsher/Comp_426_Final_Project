@@ -55,4 +55,4 @@ Frontend: HTML, CSS, JavaScript
 Backend: Node.js, Express.js
 
 ### Contributing
-Elliot, Andrew, James, Kam Thomas
+Elliot Adamson, Andrew, James, Kam Thomas
